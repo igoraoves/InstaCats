@@ -6,7 +6,11 @@ const flash = require("express-flash");
 
 const app = express();
 
-// const conn = require('./db/conn')
+// Arquivo que faz conexão da API com o banco de dados.
+const conn = require('./db/conn');
+
+//ROtas
+const authRouters = require('./routes/authRouters')
 
 const hbs = exphbs.create({
   partialsDir: ['views/partials']
@@ -18,6 +22,8 @@ app.set("view engine", "handlebars");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
+const customSessionPath = '/Users/PROFESSOR/Desktop/temp';
+
 app.use(
   session({
     name:"session",
@@ -26,7 +32,7 @@ app.use(
     saveUninitialized: false,
     store: new FileStore({
       logFn: function(){},
-      path: require('path').join(require('os').tmpdir(), 'sessions')
+      path: customSessionPath
     }),
     cookie:{
       secure:false,
@@ -48,8 +54,12 @@ app.use((request, response, next)=>{
   next()
 })
 
+app.use('/', authRouters)
+
 app.get('/', (req, res) => {
   return res.render('home')
 })
 
-app.listen(3333)
+conn.sync().then(()=>{
+  app.listen(3333)
+}).catch(error => console.log(error))

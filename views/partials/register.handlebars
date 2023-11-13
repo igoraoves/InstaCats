@@ -17,15 +17,15 @@
         <div class="login-container">
           <h1>Cadastre-se</h1>
         </div>
-        <form action="POST">
-          <label for="">Usuário</label>
-          <input type="text" />
-          <label for="">E-mail</label>
-          <input type="text" />
-          <label for="">Senha</label>
-          <input type="password" />
-          <label for="">Repita a senha</label>
-          <input type="password" />
+        <form action="/register" method="post">
+          <label for="name">Usuário</label>
+          <input type="text" name="name"/>
+          <label for="email">E-mail</label>
+          <input type="text" name="email" />
+          <label for="password">Senha</label>
+          <input type="password" name="password"/>
+          <label for="repeatPassword">Repita a senha</label>
+          <input type="password" name="repeatPassword" />
           <button type="submit">Entrar</button>
         </form>
       </div>

@@ -17,11 +17,11 @@
         <div class="login-container">
           <h1>Login</h1>
         </div>
-        <form action="POST">
+        <form action="/login" method="post">
             <label for="">Usuário</label>
-            <input type="text">
-            <label for="">Senha</label>
-            <input type="password">
+            <input type="text" name="email" placeholder="Digite seu e-mail">
+            <label for="password">Senha</label>
+            <input type="password" name="password" placeholder="Digite sua senha">
             <button type="submit">Entrar</button>
         </form>
         <h3>Cadastre-se</h3>
