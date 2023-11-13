@@ -49,13 +49,28 @@ module.exports = class AuthController {
     const {email, password} = request.body
 
     const user = await User.findOne({where: {email:email}});
+
+    // Verifica se o e-mail existe
     if(!user){
         request.flash('message', "Usuário não encontrado")
         response.render('home')
         return
     }
 
-    console.log('Chegou')
+    const passwordMatch = bcrypt.compareSync(password, user.password)
 
+    // Verifica se a senha é válida
+    if(!passwordMatch){
+      request.flash("message", "Senha inválida!");
+      response.render('home')
+    }
+
+    request.session.userId = user.id;
+
+    request.flash("message", "Usuário autenticado com sucesso!")
+
+    request.session.save(() => {
+      response.render('home')
+    })
   }
 };

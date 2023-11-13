@@ -7,59 +7,60 @@ const flash = require("express-flash");
 const app = express();
 
 // Arquivo que faz conexão da API com o banco de dados.
-const conn = require('./db/conn');
+const conn = require("./db/conn");
 
 //ROtas
-const authRouters = require('./routes/authRouters')
+const authRouters = require("./routes/authRouters");
 
 const hbs = exphbs.create({
-  partialsDir: ['views/partials']
-})
+  partialsDir: ["views/partials"],
+});
 
 app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
-
-const customSessionPath = '/Users/PROFESSOR/Desktop/temp';
+app.use(express.json());
 
 app.use(
   session({
-    name:"session",
-    secret:"SENHA_COM_SUPER_CRIPTOGRAFIA", 
-    resave: false, 
+    name: "session",
+    secret: "SENHA_COM_SUPER_CRIPTOGRAFIA",
+    resave: false,
     saveUninitialized: false,
     store: new FileStore({
-      logFn: function(){},
-      path: customSessionPath
+      logFn: function () {},
+      path: require("path").join(require("os").tmpdir(), "sessions"),
     }),
-    cookie:{
-      secure:false,
-      maxAge:360000, //Um dia
+    cookie: {
+      secure: false,
+      maxAge: 360000, //Um dia
       expires: new Date(Date.now() + 360000), //Forçar expirar em momento
-      httpOnly: true
-    }
+      httpOnly: true,
+    },
   })
-)
+);
 
-app.use(flash())
+app.use(flash());
 
 app.use(express.static("public"));
 
-app.use((request, response, next)=>{
-  if(request.session.userId){
-    response.locals.session = request.session
+app.use((request, response, next) => {
+  if (request.session.userId) {
+    response.locals.session = request.session;
   }
-  next()
-})
+  next();
+});
 
-app.use('/', authRouters)
+app.use("/", authRouters);
 
-app.get('/', (req, res) => {
-  return res.render('home')
-})
+app.get("/", (req, res) => {
+  return res.render("home");
+});
 
-conn.sync().then(()=>{
-  app.listen(3333)
-}).catch(error => console.log(error))
+conn
+  .sync()
+  .then(() => {
+    app.listen(3333);
+  })
+  .catch((error) => console.log(error));
