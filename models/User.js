@@ -29,5 +29,6 @@ const User = db.define("User", {
     }
 });
 
+
 // Exportando o módulo de User, para utilizar ele em outros arquivos da aplicação.
 module.exports = User;
